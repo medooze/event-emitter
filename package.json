@@ -1,0 +1,30 @@
+{
+	"name": "medooze-event-emitter",
+	"version": "1.0.0",
+	"description": "type-safe, modified version of EventEmitter",
+	"main": "index.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"index.js",
+		"dist"
+	],
+	"scripts": {
+		"prepare": "tsc"
+	},
+	"devDependencies": {
+		"@types/node": "^20.6.2",
+		"typescript": "^5.2.2"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/medooze/event-emitter.git"
+	},
+	"keywords": [
+		"event-emitter"
+	],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/medooze/event-emitter/issues"
+	},
+	"homepage": "https://github.com/medooze/event-emitter#readme"
+}
