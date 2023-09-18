@@ -10,13 +10,7 @@ const EventEmitter = require('events').EventEmitter;
  */
 
 /**
- * This class is like EventEmitter, except:
- *  - the event definitions are typechecked
- *  - only a subset of the API is implemented
- *  - the `maxListener` limit is removed
- *  - `emit()` is marked protected to prevent it from accidentally being called from outside of the class
- *  - implements an additional `stop()` method, which removes all listeners and causes future calls (except `emit()`) to be no-ops
- *
+ * This class is like EventEmitter, but with some enhancements / modifications (see project README).
  * @template {ListenerSignature<L>} L
  */
 class Emitter
@@ -94,6 +88,10 @@ class Emitter
 	}
 
 
+	/**
+	 * removes all listeners, and causes future calls to all methods of
+	 * this class to be no-ops (except `emit`, which will throw).
+	 */
 	stop()
 	{
 		//Remove listeners
