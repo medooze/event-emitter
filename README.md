@@ -11,6 +11,7 @@ The changes are:
  - only a small subset of the API is exported (we can expand it if needed)
  - the `maxListener` limit is removed
  - implements an additional `stop()` method, which removes all listeners and causes future calls (except `emit()`) to be no-ops
+ - exceptions thrown from event handlers are prevented from propagating out of `emit()` (thrown at the next tick instead)
 
 ## Use with type checking
 
