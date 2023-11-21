@@ -22,9 +22,35 @@ class Emitter
 	{
 		//Create event emitter
 		this.#emitter = new EventEmitter();
+		//Listener wrapper map
+		this.#map = new WeakMap();
 		//Remove limit
 		this.#emitter.setMaxListeners(0);
 	}
+
+	/**
+	 * Wraps the event listener so it throws any error asynchronously
+	 * @template {keyof L & (string | symbol)} U
+	 * @param {L[U]} listener - Event listener
+	 * @returns {L[U]}
+	 */
+	#wrap(listener)
+	{
+		let wrapped = this.#map.get(listener);
+		if (!wrapped)
+		{
+			wrapped = (...args)=>{
+				try {
+					listener(...args);
+				} catch(e) {
+					setTimeout(()=>{throw e});
+				}
+			};
+			this.#map.set(listener,wrapped);
+		}
+		return wrapped;
+	}
+
 
 	/**
 	 * @protected
@@ -52,7 +78,7 @@ class Emitter
 	on(event, listener)
 	{
 		//Delegate event listeners to event emitter
-		this.#emitter?.on(event, listener);
+		this.#emitter?.on(event, this.#wrap(listener));
 		//Return object so it can be chained
 		return this;
 	}
@@ -67,7 +93,7 @@ class Emitter
 	once(event, listener)
 	{
 		//Delegate event listeners to event emitter
-		this.#emitter?.once(event, listener);
+		this.#emitter?.once(event, this.#wrap(listener));
 		//Return object so it can be chained
 		return this;
 	}
@@ -82,7 +108,7 @@ class Emitter
 	off(event, listener)
 	{
 		//Delegate event listeners to event emitter
-		this.#emitter?.removeListener(event, listener);
+		this.#emitter?.removeListener(event, this.#map.get(listener));
 		//Return object so it can be chained
 		return this;
 	}
@@ -97,6 +123,7 @@ class Emitter
 		//Remove listeners
 		this.#emitter?.removeAllListeners();
 		//Free mem
+		this.#map = null;
 		this.#emitter = null;
 	}
 }
