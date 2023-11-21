@@ -23,7 +23,7 @@ class Emitter
 		//Create event emitter
 		this.#emitter = new EventEmitter();
 		//Listener wrapper map
-		this.map = new WeakMap();
+		this.#map = new WeakMap();
 		//Remove limit
 		this.#emitter.setMaxListeners(0);
 	}
@@ -36,7 +36,7 @@ class Emitter
 	 */
 	#wrap(listener)
 	{
-		let wrapped = this.map.get(listener);
+		let wrapped = this.#map.get(listener);
 		if (!wrapped)
 		{
 			wrapped = (...args)=>{
@@ -46,7 +46,7 @@ class Emitter
 					setTimeout(()=>{throw e});
 				}
 			};
-			this.map.set(listener,wrapped);
+			this.#map.set(listener,wrapped);
 		}
 		return wrapped;
 	}
@@ -108,7 +108,7 @@ class Emitter
 	off(event, listener)
 	{
 		//Delegate event listeners to event emitter
-		this.#emitter?.removeListener(event, this.map.get(listener));
+		this.#emitter?.removeListener(event, this.#map.get(listener));
 		//Return object so it can be chained
 		return this;
 	}
@@ -123,7 +123,7 @@ class Emitter
 		//Remove listeners
 		this.#emitter?.removeAllListeners();
 		//Free mem
-		this.map = null;
+		this.#map = null;
 		this.#emitter = null;
 	}
 }
