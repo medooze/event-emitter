@@ -17,6 +17,8 @@ class Emitter
 {
 	/** @type {EventEmitter | null} */
 	#emitter;
+	/** @type {WeakMap<any,any>} */
+	#map;
 
 	constructor()
 	{
@@ -39,7 +41,7 @@ class Emitter
 		let wrapped = this.#map.get(listener);
 		if (!wrapped)
 		{
-			wrapped = (...args)=>{
+			wrapped = (/** @type {any[]} */ ...args)=>{
 				try {
 					listener(...args);
 				} catch(e) {
@@ -123,7 +125,6 @@ class Emitter
 		//Remove listeners
 		this.#emitter?.removeAllListeners();
 		//Free mem
-		this.#map = null;
 		this.#emitter = null;
 	}
 }
