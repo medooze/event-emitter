@@ -86,6 +86,21 @@ class Emitter
 	}
 
 	/**
+	 * Add event listener at the begining of the listener array
+	 * @template {keyof L & (string | symbol)} U
+	 * @param {U} event	- Event name
+	 * @param {L[U]} listener	- Event listener
+	 * @returns {this}
+	 */
+	prependListener(event, listener)
+	{
+		//Delegate event listeners to event emitter
+		this.#emitter?.prependListener(event, this.#wrap(listener));
+		//Return object so it can be chained
+		return this;
+	}
+
+	/**
 	 * Add event listener once
 	 * @template {keyof L & (string | symbol)} U
 	 * @param {U} event	- Event name
